@@ -1,0 +1,37 @@
+import copy
+import random
+from collections import Counter
+# Consider using the modules imported above.
+
+class Hat:
+    '''kwargs is a python argument that allows for multiple arguments to be passed as a dictionary'''
+    def __init__(self, **kwargs):
+        '''contents should be a list of strings containing one item for each ball in the hat. '''
+        self.contents = []
+        for k, v in kwargs.items():
+            self.contents += [k] * v
+
+    def draw(self, toDraw=0):
+        ''' accepts an argument indicating the number of balls to draw from the hat. 
+        This method should remove balls at random from contents and return those balls as a list of strings. '''
+        chosenBall = []
+        for i in range(toDraw):
+            chosenBall.append(self.contents.pop(int(random.random() * len(self.contents))))
+        return(chosenBall)
+def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
+  final_count = 0
+  for i in range(num_experiments):
+    expected_balls_copy = copy.deepcopy(expected_balls) #need to make 
+    hat_copy = copy.deepcopy(hat) #same thing just making sure each 
+    drawResults = hat_copy.draw(num_balls_drawn) 
+    drawDict = Counter(drawResults)
+    count = 0
+    for color in drawDict:
+      if color in expected_balls_copy:
+        if(drawDict[color]>=expected_balls_copy[color]):
+          count +=1
+    if(len(expected_balls_copy) == count):
+        final_count += 1    
+  print(final_count / num_experiments)
+  return final_count / num_experiments
+
